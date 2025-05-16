@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { repo: 'rohfle/crisp-game-lib-portable-sdl-with-duktape', output: 'crisp-game-lib-portable-sdl-duktape',  dir: 'src/cglpSDL2', binary: 'cglpsdl2', filesyscopy: 'games', binaryparams: '-f', makecommand: 'CC=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/bin/aarch64-linux-gcc SDL_CONFIG=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/aarch64-buildroot-linux-gnu/sysroot/usr/bin/sdl2-config'} 
+          - { repo: 'rohfle/crisp-game-lib-portable-sdl-with-duktape', output: 'crisp-game-lib-portable-sdl-duktape',  dir: 'src/cglpSDL2', binary: 'cglpsdl2', filesyscopy: 'games', binaryparams: '-f', makecommand: 'CC=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/bin/aarch64-linux-gcc SDL_CONFIG=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/aarch64-buildroot-linux-gnu/sysroot/usr/bin/sdl2-config NOX11=1'} 
 
     runs-on: ubuntu-latest
     steps:
