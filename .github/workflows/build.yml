@@ -1,0 +1,100 @@
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually ftarget the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.output }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { repo: 'rohfle/crisp-game-lib-portable-sdl-with-duktape', output: 'crisp-game-lib-portable-sdl-duktape',  dir: 'src/cglpSDL2', binary:'cglpsdl2', binaryparams:'-f'} 
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+               
+      - name: get SDK
+        uses: wei/wget@v1
+        with:
+          args: -O rg35xx_plus_aarch64.tgz https://github.com/joyrider3774/sdks/releases/download/v1.0/aarch64-buildroot-linux-gnu_sdk-buildroot.tar.gz
+
+      - name: setup SDK
+        run: |
+          tar -xzvf ./rg35xx_plus_aarch64.tgz
+          sudo mv ./aarch64-buildroot-linux-gnu_sdk-buildroot /opt/
+          #force manual search
+          sudo rm -rf /opt/aarch64-buildroot-linux-gnu_sdk-buildroot/aarch64-buildroot-linux-gnu/sysroot/usr/lib/cmake/SDL2_net
+          sudo rm -rf /opt/aarch64-buildroot-linux-gnu_sdk-buildroot/aarch64-buildroot-linux-gnu/sysroot/usr/lib/cmake/SDL2_image
+               
+      - name: Checkout game sources sources
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          repository: ${{matrix.repo}}
+          path: tmp
+     
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{runner.workspace}}/tmp/${{matrix.dir}}/build
+        
+      - name: Configure CMake 
+        working-directory: ${{runner.workspace}}/tmp/${{matrix.dir}}/build
+        run: |
+          cmake $GITHUB_WORKSPACE/tmp/${{matrix.dir}} -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/muos_aarch64_cmake/toolchainfile.cmake
+      
+      - name: Build game
+        working-directory: ${{runner.workspace}}/tmp/${{matrix.dir}}/build
+        shell: bash
+        run: |
+          cmake --build . --config Release
+          
+      - name: prepare output directory
+        run: |
+          mkdir output
+          mkdir output/.${{matrix.output}}
+          mkdir output/.${{matrix.output}}/bin
+             
+         
+      - name: Package for ${{matrix.output}} game
+        run: |
+          cd output/.${{matrix.output}}
+          cp - ${{runner.workspace}}/tmp/${{matrix.dir}}/build/${{ matrix.binary }} ./bin/
+                      
+      - name: create ${{matrix.output}}.sh general stuff
+        run: |
+          echo "#!/bin/sh" > "./output/${{matrix.output}}.sh"
+          echo ". /opt/muos/script/var/func.sh" >> "./output/${{matrix.output}}.sh"
+          echo "HOME=\"\$(GET_VAR \"device\" \"board/home\")\"" >> "./output/${{matrix.output}}.sh"
+          echo "export HOME"  >> "./output/${{matrix.output}}.sh"
+          
+          echo "if [ \"\$(GET_VAR \"global\" \"boot/device_mode\")\" -eq 1 ]; then"  >> "./output/${{matrix.output}}.sh"
+          echo "SDL_HQ_SCALER=2" >> "./output/${{matrix.output}}.sh"          
+          echo "SDL_ROTATION=0" >> "./output/${{matrix.output}}.sh"          
+          echo "SDL_BLITTER_DISABLED=1" >> "./output/${{matrix.output}}.sh" 
+          echo "else" >> "./output/${{matrix.output}}.sh"
+          echo "SDL_HQ_SCALER=\"\$(GET_VAR \"device\" \"sdl/scaler\")\"" >> "./output/${{matrix.output}}.sh"
+          echo "SDL_ROTATION=\"\$(GET_VAR \"device\" \"sdl/rotation\")\"" >> "./output/${{matrix.output}}.sh"
+          echo "SDL_BLITTER_DISABLED=\"\$(GET_VAR \"device\" \"sdl/blitter_disabled\")\"" >> "./output/${{matrix.output}}.sh"
+          echo "fi" >> "./output/${{matrix.output}}.sh"
+          echo "export SDL_HQ_SCALER SDL_ROTATION SDL_BLITTER_DISABLED" >> "./output/${{matrix.output}}.sh"
+
+          echo "SET_VAR \"system\" \"foreground_process\" \"${{ matrix.output }}\"" >> "./output/${{matrix.output}}.sh"
+         
+          echo "SDL_GAMECONTROLLERCONFIG=\$(grep \"muOS-Keys\" \"/opt/muos/device/current/control/gamecontrollerdb_retro.txt\")" >> "./output/${{matrix.output}}.sh"
+          echo "export SDL_GAMECONTROLLERCONFIG" >> "./output/${{matrix.output}}.sh"
+          
+          echo "GAMEFOLDER=\$(dirname \"\$0\")/.${{matrix.output}}" >> "./output/${{matrix.output}}.sh"
+          echo "cd \"\$GAMEFOLDER/bin\"" >> "./output/${{matrix.output}}.sh"
+          echo "./${{matrix.binary}} ${{matrix.binaryparams}}" >> "./output/${{matrix.output}}.sh"
+          
+          chmod +x "./output/${{matrix.output}}.sh"
+            
+      - name: Store build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.output }} - 32blit - AARCH64 - Muos 
+          path: output
+          include-hidden-files: true
