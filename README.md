@@ -18,7 +18,7 @@ It Saves Highscores, overlays settings (glow, crt effect, ...), Dark / Light Set
 * START: Switch between dark / light mode
 
 ### Download
-* [crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.zip](https://github.com/joyrider3774/muos_aarch64_ports/releases/latest/download/crisp-game-lib-portable-sdl-with-duktape%_-_AARCH64_-_Muos.zip)
+* [crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.zip](https://github.com/joyrider3774/muos_aarch64_ports/releases/latest/download/crisp-game-lib-portable-sdl-with-duktape.-.AARCH64.-.Muos.zip)
 
 ### Credits
 * Duktape implementation Created by Rohfle (https://github.com/rohfle/crisp-game-lib-portable-sdl-with-duktape)
