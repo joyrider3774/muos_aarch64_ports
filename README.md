@@ -3,6 +3,7 @@ Ports of games for muos cfw devices (not made by me)
 
 ## Crisp Game Lib Portable With Duktape
 The duktape version uses duktape library to be able to run the javascript games without having to port the code (directly) to c with the SDL frontend that was earlier created. It includes 232 games of which most work. 
+It Saves Highscores, overlays settings (glow, crt effect, ...), Dark / Light Setting 
 
 ### Screenshot
 <img src="screenshots/crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.png" width=640>
@@ -17,7 +18,7 @@ The duktape version uses duktape library to be able to run the javascript games 
 * START: Switch between dark / light mode
 
 ### Download
-[crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.zip](https://github.com/joyrider3774/muos_aarch64_ports/releases/latest/download/crisp-game-lib-portable-sdl-with-duktape%_-_AARCH64_-_Muos.zip)
+* [crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.zip](https://github.com/joyrider3774/muos_aarch64_ports/releases/latest/download/crisp-game-lib-portable-sdl-with-duktape%_-_AARCH64_-_Muos.zip)
 
 ### Credits
 * Duktape implementation Created by Rohfle (https://github.com/rohfle/crisp-game-lib-portable-sdl-with-duktape)
