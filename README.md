@@ -5,7 +5,7 @@ Ports of games for muos cfw devices (not made by me)
 The duktape version uses duktape library to be able to run the javascript games without having to port the code (directly) to c with the SDL frontend that was earlier created. It includes 232 games of which most work. 
 
 ### Screenshot
-[<img src="screenshots/crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.png" width=640>](screenshots/crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.png)
+<img src="screenshots/crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.png" width=640>
 
 ### Controls
 * DPAD: selection in game selection menu
