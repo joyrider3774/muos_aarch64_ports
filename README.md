@@ -20,7 +20,7 @@ The duktape version uses duktape library to be able to run the javascript games 
 [crisp-game-lib-portable-sdl-with-duktape - AARCH64 - Muos.zip](https://github.com/joyrider3774/muos_aarch64_ports/releases/latest/download/crisp-game-lib-portable-sdl-with-duktape%_-_AARCH64_-_Muos.zip)
 
 ### Credits
-Duktape implementation Created by Rohfle (https://github.com/rohfle/crisp-game-lib-portable-sdl-with-duktape)
-Crisp Game Lib Portable Created by abagames (https://github.com/abagames/crisp-game-lib-portable)
-SDL Frontend Created by joyrider3774 (https://github.com/joyrider3774/crisp-game-lib-portable-sdl)
-All Games have been created by abagames (https://github.com/abagames)
+* Duktape implementation Created by Rohfle (https://github.com/rohfle/crisp-game-lib-portable-sdl-with-duktape)
+* Crisp Game Lib Portable Created by abagames (https://github.com/abagames/crisp-game-lib-portable)
+* SDL Frontend Created by joyrider3774 (https://github.com/joyrider3774/crisp-game-lib-portable-sdl)
+* All Games have been created by abagames (https://github.com/abagames)
