@@ -50,8 +50,8 @@ jobs:
       - name: Package for ${{matrix.output}} game
         run: |
           cd output/.${{matrix.output}}
-          cp ${{runner.workspace}}/tmp/${{ matrix.binary }} ./bin/
-          cp -r ${{runner.workspace}}/tmp/${{matrix.filesyscopy}} ./bin/${{matrix.filesyscopy}}
+          cp tmp/${{ matrix.binary }} ./bin/
+          cp -r tmp/${{matrix.filesyscopy}} ./bin/${{matrix.filesyscopy}}
                       
       - name: create ${{matrix.output}}.sh general stuff
         run: |
