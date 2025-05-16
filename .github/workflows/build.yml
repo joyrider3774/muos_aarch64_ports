@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { repo: 'rohfle/crisp-game-lib-portable-sdl-with-duktape', output: 'crisp-game-lib-portable-sdl-duktape',  dir: 'src/cglpSDL2', binary: 'cglpsdl2', filesyscopysource: '../games', filesyscopydest: 'games', binaryparams: '-f', makecommand: 'CC=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/bin/aarch64-linux-gcc SDL_CONFIG=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/aarch64-buildroot-linux-gnu/sysroot/usr/bin/sdl2-config'} 
+          - { repo: 'rohfle/crisp-game-lib-portable-sdl-with-duktape', output: 'crisp-game-lib-portable-sdl-duktape',  dir: 'src/cglpSDL2', binary: 'cglpsdl2', filesyscopy: 'games', binaryparams: '-f', makecommand: 'CC=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/bin/aarch64-linux-gcc SDL_CONFIG=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/aarch64-buildroot-linux-gnu/sysroot/usr/bin/sdl2-config'} 
 
     runs-on: ubuntu-latest
     steps:
@@ -35,10 +35,10 @@ jobs:
           path: tmp
              
       - name: Build game
-        working-directory: tmp/${{matrix.dir}}
+        working-directory: tmp/
         shell: bash
         run: |
-          make ${{matrix.makecommand}}
+          make -f ${{matrix.dir}}/Makefile ${{matrix.makecommand}}
           
       - name: prepare output directory
         run: |
@@ -50,8 +50,8 @@ jobs:
       - name: Package for ${{matrix.output}} game
         run: |
           cd output/.${{matrix.output}}
-          cp ${{runner.workspace}}/tmp/${{matrix.dir}}/${{ matrix.binary }} ./bin/
-          cp -r ${{runner.workspace}}/tmp/${{matrix.dir}}/${{matrix.filesyscopysource}} ./bin/${{matrix.filesyscopydest}}
+          cp ${{runner.workspace}}/tmp/${{ matrix.binary }} ./bin/
+          cp -r ${{runner.workspace}}/tmp/${{matrix.filesyscopy}} ./bin/${{matrix.filesyscopy}}
                       
       - name: create ${{matrix.output}}.sh general stuff
         run: |
