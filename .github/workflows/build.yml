@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { repo: 'rohfle/crisp-game-lib-portable-sdl-with-duktape', output: 'crisp-game-lib-portable-sdl-duktape',  dir: 'src/cglpSDL2', binary:'cglpsdl2', binaryparams:'-f'} 
+          - { repo: 'rohfle/crisp-game-lib-portable-sdl-with-duktape', output: 'crisp-game-lib-portable-sdl-duktape',  dir: 'src/cglpSDL2', binary:'cglpsdl2', filesyscopysource='../games' filesyscopydest='games'  binaryparams:'-f', makecommand:'CXX=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/bin/aarch64-linux-gcc SDL2CONFIG=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/aarch64-buildroot-linux-gnu/sysroot/usr/bin/sdl2-config'} 
 
     runs-on: ubuntu-latest
     steps:
@@ -36,20 +36,12 @@ jobs:
           submodules: 'true'
           repository: ${{matrix.repo}}
           path: tmp
-     
-      - name: Create Build Environment
-        run: cmake -E make_directory ${{runner.workspace}}/tmp/${{matrix.dir}}/build
-        
-      - name: Configure CMake 
-        working-directory: ${{runner.workspace}}/tmp/${{matrix.dir}}/build
-        run: |
-          cmake $GITHUB_WORKSPACE/tmp/${{matrix.dir}} -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/share/buildroot/toolchainfile.cmake
-      
+             
       - name: Build game
-        working-directory: ${{runner.workspace}}/tmp/${{matrix.dir}}/build
+        working-directory: ${{runner.workspace}}/tmp/${{matrix.dir}}
         shell: bash
         run: |
-          cmake --build . --config Release
+          make ${{matrix.makecommand}}
           
       - name: prepare output directory
         run: |
@@ -61,7 +53,8 @@ jobs:
       - name: Package for ${{matrix.output}} game
         run: |
           cd output/.${{matrix.output}}
-          cp - ${{runner.workspace}}/tmp/${{matrix.dir}}/build/${{ matrix.binary }} ./bin/
+          cp ${{runner.workspace}}/tmp/${{matrix.dir}}/${{ matrix.binary }} ./bin/
+          cp -r ${{runner.workspace}}/tmp/${{matrix.dir}}/${{matrix.filesyscopysource}} ./bin/${{matrix.filesyscopydest}}
                       
       - name: create ${{matrix.output}}.sh general stuff
         run: |
