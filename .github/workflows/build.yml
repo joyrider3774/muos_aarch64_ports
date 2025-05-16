@@ -43,7 +43,7 @@ jobs:
       - name: Configure CMake 
         working-directory: ${{runner.workspace}}/tmp/${{matrix.dir}}/build
         run: |
-          cmake $GITHUB_WORKSPACE/tmp/${{matrix.dir}} -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/muos_aarch64_cmake/toolchainfile.cmake
+          cmake $GITHUB_WORKSPACE/tmp/${{matrix.dir}} -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/opt/aarch64-buildroot-linux-gnu_sdk-buildroot/share/buildroot/toolchainfile.cmake
       
       - name: Build game
         working-directory: ${{runner.workspace}}/tmp/${{matrix.dir}}/build
