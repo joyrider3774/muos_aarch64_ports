@@ -59,22 +59,10 @@ jobs:
           echo "HOME=\"\$(GET_VAR \"device\" \"board/home\")\"" >> "./output/${{matrix.output}}.sh"
           echo "export HOME"  >> "./output/${{matrix.output}}.sh"
           
-          echo "if [ \"\$(GET_VAR \"global\" \"boot/device_mode\")\" -eq 1 ]; then"  >> "./output/${{matrix.output}}.sh"
-          echo "SDL_HQ_SCALER=2" >> "./output/${{matrix.output}}.sh"          
-          echo "SDL_ROTATION=0" >> "./output/${{matrix.output}}.sh"          
-          echo "SDL_BLITTER_DISABLED=1" >> "./output/${{matrix.output}}.sh" 
-          echo "else" >> "./output/${{matrix.output}}.sh"
-          echo "SDL_HQ_SCALER=\"\$(GET_VAR \"device\" \"sdl/scaler\")\"" >> "./output/${{matrix.output}}.sh"
-          echo "SDL_ROTATION=\"\$(GET_VAR \"device\" \"sdl/rotation\")\"" >> "./output/${{matrix.output}}.sh"
-          echo "SDL_BLITTER_DISABLED=\"\$(GET_VAR \"device\" \"sdl/blitter_disabled\")\"" >> "./output/${{matrix.output}}.sh"
-          echo "fi" >> "./output/${{matrix.output}}.sh"
-          echo "export SDL_HQ_SCALER SDL_ROTATION SDL_BLITTER_DISABLED" >> "./output/${{matrix.output}}.sh"
-
-          echo "SET_VAR \"system\" \"foreground_process\" \"${{ matrix.output }}\"" >> "./output/${{matrix.output}}.sh"
-         
-          echo "SDL_GAMECONTROLLERCONFIG=\$(grep \"muOS-Keys\" \"/opt/muos/device/current/control/gamecontrollerdb_retro.txt\")" >> "./output/${{matrix.output}}.sh"
-          echo "export SDL_GAMECONTROLLERCONFIG" >> "./output/${{matrix.output}}.sh"
+          echo "SETUP_SDL_ENVIRONMENT"  >> "./output/${{matrix.output}}.sh"
           
+          echo "SET_VAR \"system\" \"foreground_process\" \"${{ matrix.binary }}\"" >> "./output/${{matrix.output}}.sh"
+                  
           echo "GAMEFOLDER=\$(dirname \"\$0\")/.${{matrix.output}}" >> "./output/${{matrix.output}}.sh"
           echo "cd \"\$GAMEFOLDER/bin\"" >> "./output/${{matrix.output}}.sh"
           echo "./${{matrix.binary}} ${{matrix.binaryparams}}" >> "./output/${{matrix.output}}.sh"
